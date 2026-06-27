@@ -2,7 +2,7 @@
 
 A 9-page executive report built in Power BI Desktop. Custom dark design system, page-level navigation, star/galaxy schema, and a storytelling structure that builds toward a single headline finding: **delivery is Olist's biggest controllable lever**.
 
-**Skills demonstrated:** Star schema data modelling, DAX measures with relationship context management, many-to-many filter resolution, custom theme design, page-level bookmarks and navigation, dashboard storytelling, executive presentation layout.
+The trickiest part of this dashboard was the filter context — `fact_order_items` and `fact_reviews` have a many-to-many relationship that Power BI's engine couldn't resolve cleanly. The Technical Challenges section below documents exactly what broke and how it was fixed.
 
 ---
 
@@ -89,17 +89,30 @@ Joining `fact_reviews` through `fact_order_items` produces 437 duplicated diverg
 
 ---
 
-## Refreshing the Report
+## Viewing the Dashboard
 
-```
-1. Open olist_marketplace_analytics.pbix in Power BI Desktop
-2. Home → Transform data → Data source settings
-3. Change the MySQL server to 127.0.0.1 and database to olist
-4. Enter your MySQL credentials
-5. Close & Apply → Refresh
-```
+**No setup required — all 9 pages are exported as PNGs in [`powerbi/screenshots/`](screenshots/).**
 
-The SQL analytical views (`cohort_retention_matrix`, `payments_by_state`) must exist in the database before refreshing — run `sql/04_views/` first.
+Open any screenshot directly in your browser. The full narrative flows from page 00 (Home) through to page 08 (Payments & Affordability).
+
+| Quick links | |
+|---|---|
+| Executive Overview | [`01_executive_overview.png`](screenshots/01_executive_overview.png) |
+| Delivery penalty finding | [`04_delivery_operations.png`](screenshots/04_delivery_operations.png) |
+| Voice of Customer | [`07_voice_of_customer.png`](screenshots/07_voice_of_customer.png) |
+
+---
+
+## Running the .pbix Locally (optional — requires MySQL)
+
+If you want to connect the live report to your own database:
+
+1. Complete the full setup in the root [`README.md`](../README.md#-reproduce-from-scratch) first
+2. Open `olist_marketplace_analytics.pbix` in Power BI Desktop
+3. Home → Transform data → Data source settings → change server to `127.0.0.1`, database to `olist`
+4. Enter your MySQL credentials → Close & Apply → Refresh
+
+The SQL analytical views (`cohort_retention_matrix`, `payments_by_state`) must exist before refreshing — run `sql/04_views/` scripts first.
 
 ---
 
