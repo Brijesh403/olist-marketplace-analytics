@@ -2,7 +2,7 @@
 
 Three scripts that form a sequential NLP pipeline: load review text into MySQL, score it with a Portuguese sentiment model, then classify the *reasons* behind each sentiment using a custom negation-aware rule classifier.
 
-**Skills demonstrated:** Production-grade Python pipeline design — idempotent writes, crash-resumability, environment-variable credential management, batched ML inference, custom NLP with negation handling, and pandas-based data loading.
+The interesting engineering decisions are in `sentiment_analysis.py` (resumable UPSERT pattern so a 4-hour inference run can survive a crash) and `reason_analysis_v2.py` (why a custom negation-aware classifier beats a pre-trained model for this specific use case).
 
 ---
 
