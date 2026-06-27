@@ -1,8 +1,6 @@
 # SQL — Olist Marketplace Analytics
 
-This folder contains all SQL work for the project: schema design, bulk data loading, 13 analytical business-case queries, the NLP output schema, and the materialised views that feed the Power BI dashboard directly.
-
-**Skill level demonstrated:** Advanced MySQL — window functions, multi-CTE pipelines, analytical views, performance indexing, and production-grade schema design decisions.
+Four subfolders covering the full SQL lifecycle: schema design and data loading, 13 analytical queries each tied to a specific business question, the NLP output schema, and the views that feed Power BI directly. The queries get progressively more complex — start with `02_findings/seller_scorecard.sql` if you want to see the ceiling.
 
 ---
 
@@ -51,15 +49,15 @@ sql/
 
 ---
 
-## Reading Order for Recruiters
+## Where to start
 
-If you only have 10 minutes, read these files in this order:
+If you're short on time, these five files show the most depth:
 
-1. `01_setup/01_create_tables.sql` — See schema design decisions and why indexes were added where they were
-2. `02_findings/seller_scorecard.sql` — The capstone query: 5 tables, 4 CTEs, 3 ranking dimensions, business-logic segmentation
-3. `02_findings/cohort_retention.sql` — 5-stage CTE cohort analysis with the `customer_unique_id` data trap explained
+1. `01_setup/01_create_tables.sql` — Schema design decisions and why specific indexes were added where they were
+2. `02_findings/seller_scorecard.sql` — The capstone: 5 tables, 4 CTEs, 3 ranking dimensions, business-logic segmentation
+3. `02_findings/cohort_retention.sql` — 5-stage CTE cohort analysis with the `customer_unique_id` data trap documented inside
 4. `02_findings/delivery_sla_review_impact.sql` — How the 1.72★ penalty was quantified
-5. `04_views/01_cohort_retention_matrix.sql` — The Power BI-facing view with documented design rationale
+5. `04_views/01_cohort_retention_matrix.sql` — Why this ended up as a SQL view and not a DAX measure
 
 ---
 
