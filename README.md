@@ -298,21 +298,13 @@ Based on the data findings, here are three high-ROI experiments Olist could run:
 
 ---
 
-## 👨‍💻 What This Project Demonstrates
+## 🗒️ A Note on This Project
 
-Built to showcase the skill set expected at Product Analyst and Data Analyst roles at companies like Razorpay, CRED, Swiggy, Atlassian, and Flipkart.
+I spent a few weeks on this — not because Olist is a glamorous dataset, but because the questions it raises are exactly the kind a product analyst handles in a real marketplace: which sellers are risks vs. assets, whether the platform has a retention problem or an acquisition problem, and what customers actually think vs. what their star rating suggests.
 
-**SQL (MySQL 8.0)**
-`ROW_NUMBER()` with `PARTITION BY` · `LAG()` for MoM growth · `ROWS BETWEEN` window frames · 5-stage CTE cohort logic · Gaps & Islands for consecutive streaks · `AVG() OVER PARTITION BY` for benchmark comparisons · `NTILE(100)` and `NTILE(10)` for percentiles · Conditional aggregation pivots · Multi-CTE + `RANK()` + `CASE WHEN` scorecard · `DATEDIFF` + NULL handling · Persisted analytical views · Performance indexes with documented design rationale
+The SQL goes beyond the basics — every query answers a specific business question, not just "show me the data." The NLP layer came out of frustration with raw keyword frequency surfacing useless words like "terrible" with no business value. The Power BI dashboard was reworked after filter context leakage broke two pages simultaneously.
 
-**Python**
-Production-grade NLP pipeline with SQLAlchemy + batched inference · Idempotent UPSERT (crash-resumable) · Negation-aware multi-label text classifier · Environment-variable credential management · Data quality investigation with pandas · Progress tracking with tqdm
-
-**Power BI**
-Star/galaxy schema design · DAX measures with TREATAS() and CALCULATE/ALL() context management · Many-to-many relationship handling via Edit Interactions · Custom dark design system with page-level banners and icon set · Page navigation with Home landing page · Cross-page storytelling from SQL findings to NLP to business recommendation
-
-**Product Analytics Thinking**
-North Star Metric definition · Cohort retention analysis with business interpretation · Seller segmentation into actionable tiers · NLP-to-business-action translation · Three-method convergence on a single finding · A/B experiment design from data findings · Distinguishing structural market behaviour from execution failure
+If you want to evaluate specific depth: `seller_scorecard.sql` for SQL, `sentiment_analysis.py` for the Python pipeline, and the Customer Retention page in the dashboard for product thinking.
 
 ---
 
@@ -478,23 +470,6 @@ python python/reason_analysis_v2.py
 # 11. Open powerbi/olist_marketplace_analytics.pbix
 #     Data source → change MySQL connection to your local instance → Refresh
 ```
-
----
-
-## 🚧 Project Status
-
-| Phase | Status |
-|---|---|
-| Schema Design & Data Loading | ✅ Complete |
-| Data Quality Investigation | ✅ Complete |
-| Seller Performance Analysis | ✅ Complete |
-| Customer Behaviour & Retention | ✅ Complete |
-| Revenue & Operations Analysis | ✅ Complete |
-| Capstone Seller Scorecard | ✅ Complete |
-| Business Case Documentation | ✅ Complete |
-| Portuguese Sentiment Analysis (NLP) | ✅ Complete |
-| Negation-Aware Reason Classification (NLP) | ✅ Complete |
-| Executive Power BI Dashboard (9 pages) | ✅ Complete |
 
 ---
 
