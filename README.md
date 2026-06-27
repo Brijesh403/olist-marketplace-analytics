@@ -16,7 +16,7 @@
 ## 🏗️ Architecture
 
 ```
-┌─────────────────────┐     LOAD DATA INFILE       ┌──────────────────────┐
+┌─────────────────────┐     LOAD DATA INFILE        ┌──────────────────────┐
 │   Kaggle CSV Files  │  ─────────────────────────► │                      │
 │   8 tables          │     pandas (reviews only)   │   MySQL 8.0          │
 │   ~530K rows        │  ─────────────────────────► │   olist database     │
@@ -37,22 +37,22 @@
                     │  negation-aware      │          CREATE VIEW
                     │  rule classifier     │                  │
                     └──────────────────────┘                  ▼
-                                                  ┌──────────────────────┐
+                                                  ┌───────────────────────┐
                                                   │  SQL Analytical Views │
                                                   │  cohort_retention_    │
                                                   │  matrix               │
                                                   │  payments_by_state    │
                                                   │  review_reason_       │
                                                   │  summary              │
-                                                  └──────────┬───────────┘
+                                                  └──────────┬────────────┘
                                                              │  Import Mode
                                                              ▼
-                                                  ┌──────────────────────┐
+                                                  ┌───────────────────────┐
                                                   │  Power BI Desktop     │
                                                   │  9-page Dashboard     │
                                                   │  Star Schema · DAX    │
                                                   │  Custom Design System │
-                                                  └──────────────────────┘
+                                                  └───────────────────────┘
 ```
 
 ---
