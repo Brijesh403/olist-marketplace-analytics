@@ -1,7 +1,7 @@
-# data — too large, downloaded from Kaggle instead
-data/
-*.csv
-*.zip
+# data — CSVs and ZIPs are too large, download from Kaggle
+# README.md inside data/ IS tracked (explains how to get the data)
+data/*.csv
+data/*.zip
 
 # python env
 venv/
