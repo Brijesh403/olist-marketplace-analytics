@@ -49,13 +49,11 @@ A vector diagram of the 8-table star/galaxy schema. Open in any browser or SVG v
 
 ---
 
-## Navigation Guide
+## Where to start
 
-If you're a recruiter or interviewer reviewing this project:
+If you're short on time: Finding 06 (retention) and Finding 12 (seller scorecard) in `business_case.md` show the analytical depth. Add Finding 09 (delivery penalty) and the NLP section of the main README for the full narrative.
 
-- **10 minutes** → Read `business_case.md` Finding 06 (retention) and Finding 12 (seller scorecard). These two show analytical depth and business thinking.
-- **20 minutes** → Add Finding 09 (delivery penalty) and the NLP section of the main `README.md`. This shows the full analytical narrative.
-- **Full review** → Read all 12 findings in `business_case.md` alongside the SQL files in `sql/02_findings/`. Each file is documented to match the corresponding finding.
+For a complete picture: read all 12 findings alongside the SQL files in `sql/02_findings/` — each SQL file is documented to match its corresponding finding in the business case.
 
 ---
 
