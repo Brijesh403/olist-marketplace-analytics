@@ -1,4 +1,4 @@
-# data — CSVs and ZIPs are too large, download from Kaggle
+# data -- CSVs and ZIPs are too large, download from Kaggle
 # README.md inside data/ IS tracked (explains how to get the data)
 data/*.csv
 data/*.zip
