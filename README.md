@@ -5,16 +5,33 @@
 ![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-3.10-3776AB?logo=python&logoColor=white)
 ![NLP](https://img.shields.io/badge/NLP-pysentimiento%20PT-8A2BE2)
-![Power BI](https://img.shields.io/badge/Power%20BI-Executive%20Dashboard-F2C811?logo=powerbi&logoColor=black)
+![Power BI](https://img.shields.io/badge/Power%20BI-9--Page%20Dashboard-F2C811?logo=powerbi&logoColor=black)
 ![Dataset](https://img.shields.io/badge/Dataset-Olist%20(Kaggle)-2EA44F)
 
-> One dataset, three layers: deep SQL business analysis on 99,441 orders, a Portuguese NLP sentiment layer on 42,370 free-text reviews, and an executive Power BI dashboard that ties operational quality to the voice of the customer. All revenue figures are in BRL.
+> One dataset, three layers: deep SQL business analysis on 99,441 orders, a Portuguese NLP sentiment + reason-classification layer on 42,370 free-text reviews, and a 9-page executive Power BI dashboard that ties operational quality directly to the voice of the customer. All revenue figures are in BRL.
+
+---
+
+## 🖼️ Dashboard Preview
+
+**The headline finding the whole dashboard builds toward: delivery is Olist's single biggest controllable lever.** Late orders cost 1.72 stars, are 3× more likely to read negative in their written text, and account for one-third of all negative review reasons.
+
+### Executive Overview
+![Executive Overview](powerbi/screenshots/01_executive_overview.png)
+
+### Delivery & Operations — the 1.72★ penalty
+![Delivery & Operations](powerbi/screenshots/04_delivery_operations.png)
+
+### Voice of Customer — why reviews are negative, neutral, positive
+![Voice of Customer](powerbi/screenshots/07_voice_of_customer.png)
+
+> **All 9 pages** are in [`powerbi/screenshots/`](powerbi/screenshots/): Home · Executive Overview · Seller Performance & Risk · Customer Retention · Delivery & Operations · Sentiment Analysis · Sentiment Trends & Categories · Voice of Customer · Payments & Affordability.
 
 ---
 
 ## 📌 Business Context
 
-Olist is Brazil's largest e-commerce marketplace — a platform connecting 3,095 sellers to customers across 27 states. As a Data Analyst, I used this public dataset to answer the questions a marketplace analytics team deals with every week: which sellers drive the most revenue and carry the most platform risk, whether Olist has a retention problem or an acquisition problem, and how operational quality (delivery SLA) translates into the metric every marketplace ultimately cares about — review scores.
+Olist is Brazil's largest e-commerce marketplace — a platform connecting 3,095 sellers to customers across 27 states. As a Data Analyst, I used this public dataset to answer the questions a marketplace analytics team deals with every week: which sellers drive the most revenue and carry the most platform risk, whether Olist has a retention problem or an acquisition problem, how operational quality (delivery SLA) translates into review scores — and, going one layer deeper, *what customers are actually saying in their own words* and whether that text agrees with the star they clicked.
 
 The dataset has embedded newlines in review text, Portuguese category names requiring translation joins, and NULL delivery timestamps for cancelled orders — the kind of data quality issues that don't exist in tutorial datasets but show up in every production database.
 
@@ -31,6 +48,7 @@ The dataset has embedded newlines in review text, Portuguese category names requ
 7. Where is order value concentrated — what does a typical Olist order actually look like?
 8. Which sellers balance revenue, delivery quality, and customer satisfaction simultaneously?
 9. **(NLP)** What do customers actually *say* — and where does written sentiment disagree with the star rating?
+10. **(NLP)** *Why* are reviews positive, neutral, or negative — in concrete, actionable terms a business can act on (not just "happy" or "unhappy")?
 
 ---
 
@@ -38,16 +56,17 @@ The dataset has embedded newlines in review text, Portuguese category names requ
 
 > Full write-up with query rationale in [`docs/business_case.md`](docs/business_case.md).
 
-- **Olist has a retention problem, not an acquisition problem.** Month-1 retention is below 1% across every cohort — including the Black Friday 2017 cohort of 7,270 new customers (retained just 0.6%). Only 11 of 99,441 customers ordered in 3+ consecutive months.
-- **Category concentration risk in `bed_bath_table`.** Top 2 sellers earn nearly 3× what rank 3 earns (R$165K / R$152K vs R$55K), giving those two sellers significant commission negotiation leverage over the platform.
-- **Late delivery costs exactly 1.72 stars.** On-time orders average 4.29 ⭐; late orders average 2.57 ⭐. Olist's strategy of under-promising estimates (on-time orders arrive 13.7 days early) is the reason their baseline rating is high.
-- **Revenue peaked once and never recovered.** Black Friday 2017 hit R$1,003,862 (+52.1% MoM) — the only month above R$1M. The platform plateaued from April 2018 at R$850K–R$1M with near-zero growth.
+- **Olist has a retention problem, not an acquisition problem.** Month-1 retention is below 1% across every cohort — including the Black Friday 2017 cohort of 7,270 new customers (retained just 0.6%). Only 11 of 96,096 customers ordered in 3+ consecutive months.
+- **Category concentration risk in `bed_bath_table`.** Top 2 sellers earn nearly 3× what rank 3 earns, giving those two sellers significant commission negotiation leverage over the platform.
+- **Late delivery costs exactly 1.72 stars.** On-time orders average 4.29 ⭐; late orders average 2.57 ⭐. Olist's strategy of under-promising estimates (on-time orders arrive 13.7 days ahead of the promised date) is the reason their baseline rating is high.
+- **Revenue peaked once and never recovered.** Black Friday 2017 hit R$1,003,862 (+52.1% MoM) — the only month above R$1M. The platform plateaued from April 2018 with near-zero growth.
 - **Top 10% of orders generate 38% of revenue.** Median order is R$104 but the distribution has a R$13,664 tail — making average order value a misleading headline metric.
-- **Geographic concentration risk.** 20 of the top 30 revenue sellers are in SP. One BA seller (rank 2) outperforms all SP sellers on quality: R$223K revenue, 4.0% late rate, 4.08 ⭐.
-- **The North/Northeast affordability signal.** Boleto (payment for the unbanked) peaks in AP (29%) and RR (29%). PB averages 3.8 installments on R$248 orders vs SP's 2.6 installments on R$137 — higher-value purchases financed in smaller payments.
-- **(NLP) Sentiment confirms the delivery story.** 50.4% of text reviews are positive, 19.6% negative. 330 customers gave 5 stars but wrote negatively — a hidden dissatisfaction signal invisible to star-rating dashboards alone.
+- **Geographic concentration risk.** 20 of the top 30 revenue sellers are in SP. One BA seller (rank 2) outperforms all SP sellers on quality.
+- **The North/Northeast affordability signal.** Boleto (the payment method for the unbanked) peaks in AP (28.6%) and RR (28.3%) vs São Paulo's 18.8%. Customers in those poorer states also spread higher-value purchases across more monthly installments to stay affordable.
+- **(NLP) Sentiment confirms the delivery story, and reveals what stars hide.** 50.4% of text reviews are positive, 19.6% negative. **435 reviews directly contradict their own star rating** — 328 five-star reviews read negative in text, 107 one-star reviews read positive — a dissatisfaction (and context) signal completely invisible to a star-only dashboard.
+- **(NLP) One-third of negative reviews are a delivery problem — and it's the single biggest lever Olist has.** A custom rule-based, negation-aware reason classifier (built because raw keyword frequency surfaced generic emotion words like "terrible" with no business value) found: **33.3% of negative reviews are about late/non-delivery**, followed by wrong/incomplete items (10.1%) and refund requests (10.0%). Positive reviews are driven by delight (63.2%), fast delivery (23.1%), and product quality (14.0%).
 
-**Scale:** 8 tables · 99,441 orders · ~530K rows · R$13.5M GMV · Sep 2016 – Sep 2018
+**Scale:** 8 tables · 99,441 orders · ~530K rows · R$13.5M GMV · Sep 2016 – Sep 2018 · 42,370 NLP-scored reviews
 
 ---
 
@@ -55,10 +74,12 @@ The dataset has embedded newlines in review text, Portuguese category names requ
 
 | Recommendation | Based On | Expected Action |
 |---|---|---|
+| Treat delivery speed as the #1 CX investment | 33.3% of negative reviews cite late delivery; late orders are 3× more likely to read negative | Prioritize logistics/SLA improvements over feature work |
 | Stop investing in loyalty — maximise first-order margin | Sub-1% m1 retention across all cohorts | Reallocate retention budget to acquisition |
-| Diversify `bed_bath_table` seller base | 2 sellers earning 3× rank 3 | Onboard 2–3 new sellers to reduce negotiation risk |
-| Fast-track exit for High Revenue Risk sellers | Rank 5: R$188K but 3.35 ⭐ | Protect platform NPS before it shows in aggregate |
-| Maintain deliberate delivery under-promise policy | On-time orders arrive 13.7 days early → 4.29 ⭐ | Do not adjust estimates — this is a zero-cost rating driver |
+| Diversify `bed_bath_table` seller base | 2 sellers earning ~3× rank 3 | Onboard 2–3 new sellers to reduce negotiation risk |
+| Fast-track exit for High Revenue Risk sellers | High revenue, sub-3.5★ rating sellers | Protect platform NPS before it shows in aggregate |
+| Maintain deliberate delivery under-promise policy | On-time orders arrive 13.7 days ahead → 4.29★ | Do not tighten estimates — this is a zero-cost rating driver |
+| Audit 5★-but-negative reviews manually | 328 reviews praise the score but complain in text | Likely an early-warning signal current QA misses entirely |
 
 ---
 
@@ -66,10 +87,10 @@ The dataset has embedded newlines in review text, Portuguese category names requ
 
 | Tool | Purpose |
 |---|---|
-| MySQL 8.0 | Data storage and all SQL analysis |
-| Python — pandas, SQLAlchemy | Data loading (reviews CSV bypass for embedded newlines) |
+| MySQL 8.0 | Data storage, all SQL analysis, and analytical views |
+| Python — pandas, SQLAlchemy | Data loading (reviews CSV bypass) + reason classification |
 | Python — pysentimiento, transformers, PyTorch (CPU) | Portuguese sentiment analysis on 42,370 review texts |
-| Power BI Desktop | Executive dashboard — star schema, DAX, custom design system |
+| Power BI Desktop | 9-page executive dashboard — star schema, DAX, custom design system, page navigation |
 | Git + GitHub | Version control and portfolio |
 
 ---
@@ -99,21 +120,27 @@ olist-marketplace-analytics/
 │   │   ├── order_value_percentiles.sql         ← order value percentiles and revenue concentration
 │   │   └── seller_scorecard.sql                ← capstone — seller revenue, quality and delivery
 │   │
-│   └── 03_sentiment/
-│       └── 01_create_review_sentiment.sql      ← review_sentiment table schema (idempotent)
+│   ├── 03_sentiment/
+│   │   └── 01_create_review_sentiment.sql      ← review_sentiment table schema (idempotent)
+│   │
+│   └── 04_views/                               ← views powering the Power BI dashboard
+│       ├── 01_cohort_retention_matrix.sql       ← cohort heatmap source
+│       ├── 02_payments_by_state.sql             ← boleto/installments-by-state source
+│       └── 03_review_reason_summary.sql         ← (doc) table generated by reason_analysis_v2.py
 │
 ├── python/
 │   ├── load_reviews.py                         ← pandas loader for order_reviews CSV
 │   ├── sentiment_analysis.py                   ← Portuguese sentiment pipeline (batched, resumable)
+│   ├── reason_analysis_v2.py                   ← negation-aware reason classifier (the "why")
 │   └── requirements.txt                        ← pinned dependencies
 │
-├── powerbi/                                    ← 🚧 in progress
-│   ├── olist_dashboard.pbix
-│   └── screenshots/
+├── powerbi/
+│   ├── olist_marketplace_analytics.pbix        ← full 9-page dashboard
+│   └── screenshots/                            ← PNG export of every page (this README's images)
 │
 ├── docs/
 │   ├── business_case.md                        ← findings + business interpretation
-│   └── data_model.svg                          ← star-schema diagram
+│   └── olist_data_model.svg                    ← star-schema diagram
 │
 └── data/                                       ← not tracked — download from Kaggle
 ```
@@ -131,9 +158,10 @@ olist-marketplace-analytics/
 | Gaps & Islands | Row_number subtraction to detect consecutive ordering streaks |
 | `AVG() OVER PARTITION BY` | State-level seller benchmark comparisons |
 | `NTILE(100)` and `NTILE(10)` | Order value percentiles and decile revenue share |
-| Conditional aggregation pivot | Payment method mix across 17 states |
+| Conditional aggregation pivot | Payment method mix across 27 states |
 | Multi-CTE + `RANK()` + `CASE WHEN` | Capstone scorecard — 3 dimensions ranked simultaneously |
 | `DATEDIFF` + NULL handling | Delivery SLA compliance — late vs on-time classification |
+| Persisted analytical views | Cohort matrix + payments-by-state materialized as views feeding BI directly |
 
 ---
 
@@ -156,9 +184,13 @@ olist-marketplace-analytics/
 
 ## 🔧 Data Quality Notes
 
-**1. The reviews CSV breaks bulk loading.** `LOAD DATA INFILE` fails at row 77,917 because customer review text contains embedded newlines and imperfectly escaped quotes. MySQL's line parser trips on them. The fix is pandas — a proper CSV parser that handles multi-line quoted fields. The other 7 tables load fine via bulk load. See `python/load_reviews.py`.
+**1. The reviews CSV breaks bulk loading.** `LOAD DATA INFILE` fails because customer review text contains embedded newlines and imperfectly escaped quotes. MySQL's line parser trips on them. The fix is pandas — a proper CSV parser that handles multi-line quoted fields. The other 7 tables load fine via bulk load. See `python/load_reviews.py`.
 
-**2. Category names loaded with trailing carriage return characters.** Windows CRLF line endings in `product_category_name_translation.csv` left carriage returns on every English category name — silently breaking every JOIN on that column with no error, just missing data. A single `UPDATE` with `REPLACE()` cleaned it. Small bug, but the kind that takes hours to track down if you don't know to look for it.
+**2. Category names loaded with trailing carriage return characters.** Windows CRLF line endings in `product_category_name_translation.csv` left carriage returns on every English category name — silently breaking every JOIN on that column with no error, just missing data. A single `UPDATE` with `REPLACE()` cleaned it.
+
+**3. Duplicate `review_id` rows in the order-items join.** Joining reviews through `order_items` (a review can technically join to multiple line items) produced 437 duplicated divergence cases in early analysis; deduplicating on `review_id` in Power Query corrected this to the true figure of **435**.
+
+**4. Percentage columns stored as raw ratios, not pre-multiplied values.** `payments_by_state.boleto_pct` stores `0.286`, not `28.6` — letting Power BI's native percentage format handle display everywhere automatically (cards, axes, tooltips) without per-visual formatting hacks.
 
 ---
 
@@ -170,7 +202,7 @@ olist-marketplace-analytics/
 |---|---|---|---|---|
 | watches_gifts | R$201K | R$192K | R$170K | Healthy — within 16% |
 | health_beauty | R$79K | R$72K | R$66K | Healthy |
-| bed_bath_table | R$165K | R$152K | R$55K | **Risk — 3× gap to rank 3** |
+| bed_bath_table | R$165K | R$152K | R$55K | **Risk — ~3× gap to rank 3** |
 | computers_accessories | R$53K | R$52K | R$47K | Healthy — very tight |
 | sports_leisure | R$54K | R$42K | R$42K | Moderate |
 
@@ -193,17 +225,6 @@ olist-marketplace-analytics/
 | Black Friday peak (monthly) | 2017-11 | R$1,003,862 |
 | Total GMV (end of dataset) | 2018-09-03 | R$13,496,408 |
 
-### Revenue growth phases
-
-| Period | Revenue | MoM Growth | Phase |
-|---|---|---|---|
-| 2017-03 | R$368K | +50.4% | Explosive growth |
-| 2017-05 | R$503K | +42.2% | Explosive growth |
-| 2017-11 | R$1,003K | +52.1% | Black Friday peak — only month above R$1M |
-| 2017-12 | R$742K | −26.1% | Post-holiday unwind |
-| 2018-04 | R$993K | +1.3% | Plateau begins |
-| 2018-05 | R$992K | −0.1% | Plateau |
-
 ### Customer retention — the one-time buyer problem
 
 | Cohort | Acquired (m0) | Returned (m1) | m1 Retention |
@@ -213,35 +234,25 @@ olist-marketplace-analytics/
 | 2017-08 | 4,162 | 28 | 0.7% |
 | 2017-11 (Black Friday) | 7,270 | 40 | 0.6% |
 | 2018-01 | 6,992 | 23 | 0.3% |
-| 2018-04 | 6,700 | 39 | 0.6% |
 
-### Loyal customers — 0.011% of the base
-
-| Customer (hashed) | Streak | From | To |
-|---|---|---|---|
-| 8d50f5ea… | 7 months | 2017-05 | 2018-08 |
-| 6469f99c… | 5 months | 2017-09 | 2018-06 |
-| 1b6c7548… | 4 months | 2017-11 | 2018-02 |
-| 8 others | 3 months | various | various |
+**96.9%** of Olist's 96,096 customers never placed a second order. Only **252** placed 3+ orders, and just **11** in consecutive months.
 
 ### Delivery SLA — 1.72 star penalty per late order
 
 | Status | Orders | % of Total | Avg Rating | Avg Days vs Estimate |
 |---|---|---|---|---|
-| On Time | 88,653 | 92% | 4.29 ⭐ | −13.7 days (early) |
-| Late | 7,700 | 8% | 2.57 ⭐ | +8.8 days (late) |
+| On Time | 88,653 | 91.9% | 4.29 ⭐ | 13.7 days ahead of promise |
+| Late | 7,700 | 8.1% | 2.57 ⭐ | 8.9 days past promise |
 
 ### Payment behaviour — regional affordability signal
 
-| State | Orders | Credit Card | Boleto | Avg Installments | Avg Order Value |
-|---|---|---|---|---|---|
-| SP | 41,418 | 77.1% | 19.7% | 2.6 | R$137 |
-| RJ | 12,766 | 80.1% | 16.8% | 3.0 | R$158 |
-| MA | 743 | 71.7% | 27.1% | 3.1 | R$199 |
-| PB | 534 | 80.0% | 17.4% | 3.8 | R$248 |
-| TO | 279 | 70.3% | 27.2% | 3.0 | R$204 |
-| AP | 68 | 69.1% | 29.4% | 2.6 | R$232 |
-| RR | 45 | 71.1% | 28.9% | 2.8 | R$221 |
+| State | Boleto % | Credit Card % | Avg Installments | Avg Order Value |
+|---|---|---|---|---|
+| AP | 28.6% | 67.1% | 2.6 | R$232 |
+| RR | 28.3% | 71.7% | 2.7 | R$219 |
+| MA | 26.5% | 69.8% | 3.1 | R$199 |
+| RS | 24.0% | 70.3% | 3.0 | R$157 |
+| SP | 19.7% | 77.1% | 2.6 | R$137 |
 
 ### Order value distribution — median R$104, top 10% drive 38% of revenue
 
@@ -252,7 +263,6 @@ olist-marketplace-analytics/
 | 75th | R$175 | Upper half |
 | 90th | R$297 | High-value threshold |
 | Top 10% decile | R$307+ | Generates 38.1% of total revenue |
-| Top 20% decile | R$243+ | Generates 53%+ of total revenue |
 | Maximum | R$13,664 | 130× the median |
 
 ### Capstone — Seller scorecard: revenue vs quality vs delivery
@@ -260,10 +270,10 @@ olist-marketplace-analytics/
 | Revenue Rank | State | Revenue | Late % | Avg Rating | Segment |
 |---|---|---|---|---|---|
 | 1 | SP | R$229K | 11.6% | 4.13 ⭐ | Standard |
-| 2 | BA | R$223K | 4.0% | 4.08 ⭐ | **Star Seller ✓** |
-| 3 | SP | R$200K | 11.0% | 3.80 ⭐ | Standard |
-| 4 | SP | R$193K | 10.2% | 4.34 ⭐ | Standard |
-| 5 | SP | R$188K | 9.6% | 3.35 ⭐ | **High Revenue Risk ⚠** |
+| 2 | BA | R$223K | 4.3% | 4.13 ⭐ | **Star Seller ✓** |
+| 3 | SP | R$200K | 11.0% | 3.83 ⭐ | Standard |
+| 4 | SP | R$194K | 10.2% | 4.34 ⭐ | Standard |
+| 5 | SP | R$188K | 10.1% | 3.48 ⭐ | **High Revenue Risk ⚠** |
 
 ---
 
@@ -285,33 +295,63 @@ The reviews table holds 1–5 star scores **and** free-text comments in Brazilia
 | Neutral | 12,723 | 30.0% |
 | Negative | 8,288 | 19.6% |
 
-**Divergence — the most interesting stories:**
+**Divergence — sentiment vs star rating disagree on 435 reviews:**
 
 | Case | Count | Why it matters |
 |---|---|---|
-| 5★ rating but **negative** text | 330 | Hidden dissatisfaction — customers who rate well but write complaints |
-| 1★ rating but **positive** text | 107 | Context reviews — low score due to delivery/seller, praise for product |
+| 5★ rating but **negative** text | 328 | Hidden dissatisfaction — customers who rate well but write complaints |
+| 1★ rating but **positive** text | 107 | Context reviews — low score likely driven by delivery/seller, not the product itself |
 
-**Caveats:** domain shift (model trained on tweets, not reviews); Portuguese sarcasm and negation are edge cases; confidence score stored per review so low-certainty labels can be filtered downstream.
+**Caveats:** domain shift (model trained on tweets, not reviews); confidence score stored per review so low-certainty labels can be filtered downstream.
 
 Schema: `sql/03_sentiment/01_create_review_sentiment.sql`
 
 ---
 
-## 📊 Executive Power BI Dashboard *(🚧 in progress)*
+## 🗣️ Voice of Customer — Reason Classification (the "why" behind sentiment)
 
-A 6-page executive report built on a star schema (fact grain = order line items, conformed on `order_id`), Import mode, with a restrained custom design system.
+Sentiment alone answers "how many customers were unhappy" — it doesn't tell a business *what to fix*. An initial pass at word-frequency analysis surfaced only generic emotion words ("terrible", "loved it"), which carry no actionable signal. So I built a **rule-based, multi-label, negation-aware reason classifier** (`python/reason_analysis_v2.py`) that scans each review's Portuguese text for phrase patterns mapping to concrete business reasons: late/non-delivery, damaged item, wrong/incomplete item, poor quality, poor seller service, refund requests, fast delivery, good product, and general delight.
+
+**Negation handling is the key accuracy fix.** A naive keyword match counts *"não recomendo"* ("I do NOT recommend") as praise because it contains "recomendo." The classifier checks the 3 words preceding any praise trigger for a negator (não/nem/nunca) and discards the match if negated — catching **326 negative reviews** that would have otherwise been miscounted as positive, and correcting positive-review "late delivery" false positives from 5,412 down to 454 (most of the remainder being genuine "arrived a bit late but I still loved it" mixed reviews, which is honest multi-label behaviour, not a bug).
+
+**Top reasons per sentiment** (multi-label — a review can match more than one reason, so % can exceed the sentiment's total):
+
+| Negative reviews (% of 8,309) | Neutral reviews (% of 12,416) | Positive reviews (% of 20,233) |
+|---|---|---|
+| Late or non-delivery — **33.3%** | Late or non-delivery — 22.6% | Delighted / would recommend — **63.2%** |
+| Wrong or incomplete item — 10.1% | Fast / early delivery — 11.9% | Fast / early delivery — 23.1% |
+| Wants refund / cancellation — 10.0% | Wrong or incomplete item — 4.8% | Good product / as described — 14.0% |
+| Damaged or defective — 8.0% | Delighted / would recommend — 4.5% | |
+| Poor quality / not as described — 6.0% | Wants refund / cancellation — 3.2% | |
+| Poor seller service / communication — 2.3% | | |
+
+**The thesis this confirms across the whole dashboard:** delivery shows up as the dominant driver in the SQL findings (1.72★ penalty), in raw sentiment (late orders 3× more likely to read negative), and now in the reason classification (one-third of all negative reviews cite late or failed delivery). Three independent analytical methods point at the same lever.
+
+Output table: `review_reason_summary` (generated by the script, documented in `sql/04_views/03_review_reason_summary.sql`).
+
+---
+
+## 📊 Executive Power BI Dashboard
+
+A 9-page executive report built on a star/galaxy schema (fact grain = order line items, conformed on `order_id`), Import mode, with a custom dark design system and page-to-page navigation (Home landing page with 8 nav cards; a return-to-Home icon on every page).
 
 | Page | Headline insight |
 |---|---|
-| Executive Overview | KPI cards + GMV trajectory with Black Friday peak annotated on-chart |
-| Seller Performance & Risk | 4-segment seller scorecard + `bed_bath_table` concentration + state map |
-| Customer Retention | Sub-1% cohort retention heatmap |
-| Delivery & Operations | 1.72★ late-delivery penalty + 13.7-day under-promise insight |
-| Sentiment Analysis | Sentiment vs star-rating divergence + sentiment by delivery status |
-| Payments & Regional Affordability | Boleto vs credit-card map + installments by region |
+| **Home** | Landing page · dataset summary · navigation to all 8 content pages |
+| **Executive Overview** | KPI cards + GMV trajectory with Black Friday peak annotated on-chart |
+| **Seller Performance & Risk** | 4-segment seller scorecard + `bed_bath_table` concentration risk + revenue-by-state map |
+| **Customer Retention** | Sub-1% cohort retention heatmap, every month, every cohort |
+| **Delivery & Operations** | The 1.72★ late-delivery penalty + 13.7-day deliberate under-promise insight |
+| **Sentiment Analysis** | Sentiment vs star-rating divergence matrix (435 cases) + sentiment by delivery status |
+| **Sentiment Trends & Categories** | Sentiment stability over time + sentiment breakdown across top 10 categories |
+| **Voice of Customer** | The reason classifier — why reviews are negative / neutral / positive, in plain business language |
+| **Payments & Affordability** | Boleto-usage map + order-value-vs-installments scatter — the North/Northeast affordability story |
 
-Files: `powerbi/olist_dashboard.pbix` + `powerbi/screenshots/` *(added when built)*.
+**Technical challenges solved during the build** (good interview material):
+- **Many-to-Many filter leakage** — the `fact_order_items ↔ fact_reviews` bridge and a Both-direction 1:1 relationship caused several measures to leak filters through unintended paths. Fixed via explicit `TREATAS()` joins on collected ID sets where DAX's relationship engine couldn't be trusted, and via **Edit Interactions** where even that wasn't sufficient.
+- **Cross-filter contamination on a derived percentage measure** — clicking a category bar inflated a date-based sentiment trend measure past 100% because the filter context leaked past the `ALL()` modifiers applied at the wrong CALCULATE step. Resolved by moving complex aggregations into precomputed SQL views (`sentiment_trend_monthly`, `cohort_retention_matrix`, `payments_by_state`) instead of fighting the relationship model further — the right call when a DAX fix requires more debugging than the insight is worth.
+
+Files: `powerbi/olist_marketplace_analytics.pbix` + `powerbi/screenshots/`.
 
 ---
 
@@ -329,7 +369,12 @@ pip install -r python/requirements.txt
 $env:OLIST_DB_PASSWORD = "your_password"
 python python/sentiment_analysis.py
 
-# 4. Open powerbi/olist_dashboard.pbix and refresh against your local MySQL
+# 4. Run the reason classifier (builds on the sentiment table)
+python python/reason_analysis_v2.py
+
+# 5. Create the analytical views (cohort + payments) from sql/04_views/
+
+# 6. Open powerbi/olist_marketplace_analytics.pbix and refresh against your local MySQL
 ```
 
 ---
@@ -346,7 +391,8 @@ python python/sentiment_analysis.py
 | Capstone Seller Scorecard | ✅ Complete |
 | Business Case Documentation | ✅ Complete |
 | Portuguese Sentiment Analysis (NLP) | ✅ Complete |
-| Executive Power BI Dashboard | 🚧 In Progress |
+| Negation-Aware Reason Classification (NLP) | ✅ Complete |
+| Executive Power BI Dashboard (9 pages) | ✅ Complete |
 
 ---
 
