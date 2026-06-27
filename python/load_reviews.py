@@ -8,13 +8,17 @@ The review_comment_message field contains embedded newlines and imperfectly
 escaped quotes. MySQL's line parser fails at row 77,917. pandas handles
 multi-line quoted fields natively, so we use it as the loader here.
 
-Usage:
-    Set DB credentials as environment variables before running:
-        export DB_USER=root
-        export DB_PASS=your_password_here
+Usage (PowerShell):
+    $env:OLIST_DB_PASSWORD = "your_password"   # required
+    $env:OLIST_DB_USER     = "root"            # optional, defaults to root
+    python python/load_reviews.py
 
-    Then:
-        python python/load_reviews.py
+Usage (bash/zsh):
+    export OLIST_DB_PASSWORD="your_password"
+    python python/load_reviews.py
+
+Note: env var names are consistent across all three scripts in this project
+(load_reviews.py, sentiment_analysis.py, reason_analysis_v2.py).
 """
 
 import os
@@ -23,11 +27,12 @@ from sqlalchemy import create_engine
 from pathlib import Path
 
 # --- DB connection — credentials from environment variables ---
-DB_USER = os.environ.get("DB_USER", "root")
-DB_PASS = os.environ.get("DB_PASS", "")
-DB_HOST = os.environ.get("DB_HOST", "127.0.0.1")
-DB_PORT = os.environ.get("DB_PORT", "3306")
-DB_NAME = os.environ.get("DB_NAME", "olist")
+# Naming convention: OLIST_DB_* matches sentiment_analysis.py and reason_analysis_v2.py
+DB_USER = os.environ.get("OLIST_DB_USER", "root")
+DB_PASS = os.environ.get("OLIST_DB_PASSWORD", "")
+DB_HOST = os.environ.get("OLIST_DB_HOST", "127.0.0.1")
+DB_PORT = os.environ.get("OLIST_DB_PORT", "3306")
+DB_NAME = os.environ.get("OLIST_DB_NAME", "olist")
 
 engine = create_engine(
     f"mysql+pymysql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
