@@ -13,6 +13,23 @@
 
 ---
 
+## 🖼️ Dashboard Preview
+
+**The headline finding the whole dashboard builds toward:** delivery is Olist's single biggest controllable lever. Late orders cost **1.72 stars**, are **3× more likely** to read negative in written text, and account for **one-third of all negative review reasons** — three independent analytical methods pointing at the same lever.
+
+### Executive Overview
+![Executive Overview](powerbi/screenshots/01_executive_overview.png)
+
+### Delivery & Operations — the 1.72★ penalty
+![Delivery & Operations](powerbi/screenshots/04_delivery_operations.png)
+
+### Voice of Customer — what customers actually say
+![Voice of Customer](powerbi/screenshots/07_voice_of_customer.png)
+
+> All 9 dashboard pages are in [`powerbi/screenshots/`](powerbi/screenshots/): Home · Executive Overview · Seller Performance & Risk · Customer Retention · Delivery & Operations · Sentiment Analysis · Sentiment Trends & Categories · Voice of Customer · Payments & Affordability.
+
+---
+
 ## 🏗️ Architecture
 
 ```
@@ -54,23 +71,6 @@
                                                   │  Custom Design System │
                                                   └───────────────────────┘
 ```
-
----
-
-## 🖼️ Dashboard Preview
-
-**The headline finding the whole dashboard builds toward:** delivery is Olist's single biggest controllable lever. Late orders cost **1.72 stars**, are **3× more likely** to read negative in written text, and account for **one-third of all negative review reasons** — three independent analytical methods pointing at the same lever.
-
-### Executive Overview
-![Executive Overview](powerbi/screenshots/01_executive_overview.png)
-
-### Delivery & Operations — the 1.72★ penalty
-![Delivery & Operations](powerbi/screenshots/04_delivery_operations.png)
-
-### Voice of Customer — what customers actually say
-![Voice of Customer](powerbi/screenshots/07_voice_of_customer.png)
-
-> All 9 dashboard pages are in [`powerbi/screenshots/`](powerbi/screenshots/): Home · Executive Overview · Seller Performance & Risk · Customer Retention · Delivery & Operations · Sentiment Analysis · Sentiment Trends & Categories · Voice of Customer · Payments & Affordability.
 
 ---
 
