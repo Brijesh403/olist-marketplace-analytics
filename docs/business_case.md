@@ -624,3 +624,12 @@ for quartile segmentation, conditional business logic via
 CASE WHEN, and minimum threshold filtering for analytical
 reliability — all in service of a single business decision
 framework. Everything from Findings 01–11 feeds into this view.
+
+**Scope caveat:** the three dimension CTEs (revenue, delivery,
+reviews) are combined with INNER JOINs, so a seller only appears
+in the scorecard if they have revenue, at least one delivered
+order, and at least one review. Sellers with only in-transit or
+cancelled orders, or no reviews yet, are silently excluded rather
+than scored as zero — meaning this view undercounts newer or
+slower-moving sellers. Worth stating explicitly rather than
+letting a reviewer discover it by testing edge cases.

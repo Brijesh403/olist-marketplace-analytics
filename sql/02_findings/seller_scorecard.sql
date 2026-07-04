@@ -65,6 +65,19 @@ seller_reviews AS (
 ),
 combined AS (
     -- Join all three dimensions, filter to sellers with enough data
+    --
+    -- CAVEAT: these are INNER JOINs, so a seller only appears in the
+    -- final scorecard if they have (a) revenue, (b) at least one
+    -- order with status='delivered' and non-NULL timestamps, AND
+    -- (c) at least one review. A seller with only in-transit or
+    -- cancelled orders, or zero reviews so far, is silently excluded
+    -- entirely -- not scored as zero, just absent. This is a
+    -- deliberate scope limitation (you can't rank delivery/quality
+    -- for a seller with no delivery/review data yet), but it means
+    -- this scorecard undercounts newer or slower-moving sellers.
+    -- A production version would LEFT JOIN and surface these sellers
+    -- with an explicit "insufficient data" flag rather than dropping
+    -- them.
     SELECT
         sr.seller_id,
         s.seller_state,
